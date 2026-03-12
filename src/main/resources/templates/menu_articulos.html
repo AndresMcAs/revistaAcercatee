@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:insert="~{header :: encabezado}">
+    <title>Menú de Artículos</title>
+</head>
+
+<body class="bg-light">
+
+<!-- NAVBAR -->
+<div th:insert="~{header :: navbar}"></div>
+
+<div class="container my-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Menú de Artículos</h4>
+        </div>
+
+        <div class="card-body">
+
+            <!-- BARRA SUPERIOR -->
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              
+                <input type="text" class="form-control w-auto" placeholder="Buscar revista...">
+
+                <button class="btn btn-outline-primary">
+                    🔎 Buscar
+                </button>
+
+                <button class="btn btn-success"
+                        onclick="window.location.href='/registroArticulos'">
+                    ➕ Agregar Artículo
+                </button>
+
+                <button class="btn btn-danger">
+                    ❌ Eliminar
+                </button>
+
+                <button class="btn btn-warning">
+                    📝 Asignar Revisión
+                </button>
+
+                <button class="btn btn-secondary">
+                    📄 Generar Dictamen
+                </button>
+
+            </div>
+
+            <!-- TABLA -->
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover align-middle text-center">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Artículo</th>
+                            <th>Autor</th>
+                            <th>Estatus</th>
+                            <th>Tema</th>
+                            <th>Sección</th>
+                            <th>N° Páginas</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tablaArticulos">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- PAGINACIÓN -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+
+                <button class="btn btn-outline-primary btn-sm" id="btnAnterior">
+                    ⬅ Anterior
+                </button>
+
+                <span id="infoPagina" class="fw-bold">
+                    Página 1
+                </span>
+
+                <button class="btn btn-outline-primary btn-sm" id="btnSiguiente">
+                    Siguiente ➡
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS DEL HEADER -->
+<div th:insert="~{header :: scripts}"></div>
+
+</body>
+</html>

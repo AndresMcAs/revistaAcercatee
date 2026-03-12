@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Revista</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- BOOTSTRAP CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Scroll solo para la tabla */
+        .table-scroll {
+            max-height: 350px; /* aprox 10 registros */
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-light"> 
+<!-- ===== NAVBAR (FRAGMENT) ===== -->
+<div >
+   <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#"> <h1> Acércate</h1></a>
+
+        <!-- BOTÓN RESPONSIVE -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- MENÚ -->
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link" href="index.html">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html#seccion-usuarios">Usuarios</a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="index.html#seccion-articulos">Artículos</a>
+                </li>
+ 
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html#seccion-revistas">Revistas</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html#seccion-revisores">Revisiones</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="publicaciones.html">Publicaciones</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+</div>
+<!-- navbar----------->   
+<div class="container my-4">
+
+    <!-- TÍTULO -->
+    <h2 class="mb-4">Nueva Revista</h2>
+
+    <!-- ================= DATOS GENERALES ================= -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold">
+            Datos de la Revista
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <label class="form-label">Número de Revista</label>
+                    <input type="number" class="form-control" placeholder="Ej. 15">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Fecha de Publicación</label>
+                    <input type="date" class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Año de Edición</label>
+                    <input type="number" class="form-control" placeholder="Ej. 2026">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Periodo</label>
+                    <select class="form-select">
+                        <option value="">Seleccione</option>
+                        <option>Enero-Junio</option>
+                        <option>Julio-Diciembre</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= SELECCIÓN Y ACCIONES ================= -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold">
+            Selección de Artículos
+        </div>
+        <div class="card-body">
+
+            <!-- SELECTOR + BOTONES -->
+            <div class="row g-3 align-items-end mb-3">
+                <div class="card-body d-flex gap-1">
+            <input type="text" class="form-control" placeholder="Buscar artículo por nombre">
+            <button class="btn btn-primary">Buscar</button>
+        </div>
+                <div class="col-md-5">
+                    <label class="form-label">Artículos disponibles</label>
+                    <select class="form-select" id="selectArticulo">
+                        <option>-- Lista cargada desde base de datos --</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 d-flex gap-2 flex-wrap">
+                    <button class="btn btn-success" id="btnAgregar">Agregar</button>
+                    <button class="btn btn-danger" id ="btnEliminar">Eliminar</button>
+                    <button class="btn btn-secondary">Generar Índice</button>
+                    
+                    <!-- FLECHAS -->
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary" id="btnSubir">⬆</button>
+                        <button class="btn btn-outline-primary" id="btnBajar">⬇</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= TABLA ================= -->
+            <div class="table-scroll">
+                <table class="table table-bordered table-hover align-middle text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Nombre del Artículo</th>
+                            <th>Autor</th>
+                            <th>Estatus</th>
+                            <th>Página Inicial</th>
+                            <th>Página Final</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaArticulos">
+                        <!-- Ejemplo -->
+                        <tr>
+                            <td class="text-start">Inteligencia Artificial Aplicada</td>
+                            <td>Juan Pérez</td>
+                            <td>Publicado</td>
+                            <td>1</td>
+                            <td>12</td>
+                        </tr>
+                        <!-- Registros dinámicos -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ================= CONTADORES ================= -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                   <strong>Total de artículos:</strong> <span id="totalArticulos">0</span> 
+                   <strong>Total de páginas:</strong> <span id="totalPaginas">0</span>
+                </div>
+
+                <button class="btn btn-primary">
+                    Enviar al Diseñador
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- BOOTSTRAP JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let filaActiva = null;
+
+const tabla = document.getElementById("tablaArticulos");
+const totalArticulos = document.getElementById("totalArticulos");
+const totalPaginas = document.getElementById("totalPaginas");
+
+function actualizarContadores() {
+    const filas = tabla.querySelectorAll("tr");
+    totalArticulos.textContent = filas.length;
+
+    let paginas = 0;
+    filas.forEach(fila => {
+        const inicio = parseInt(fila.cells[3].textContent);
+        const fin = parseInt(fila.cells[4].textContent);
+        paginas += (fin - inicio + 1);
+    });
+
+    totalPaginas.textContent = paginas;
+}
+
+function seleccionarFila(fila) {
+    if (filaActiva) {
+        filaActiva.classList.remove("table-active");
+    }
+    filaActiva = fila;
+    fila.classList.add("table-active");
+}
+
+document.getElementById("btnAgregar").addEventListener("click", function () {
+    const select = document.getElementById("selectArticulo");
+    const datos = select.value.split("|");
+
+    const nuevaFila = document.createElement("tr");
+
+    nuevaFila.innerHTML = `
+        <td class="text-start">${datos[0]}</td>
+        <td>${datos[1]}</td>
+        <td>${datos[2]}</td>
+        <td>${datos[3]}</td>
+        <td>${datos[4]}</td>
+    `;
+
+    nuevaFila.addEventListener("click", function () {
+        seleccionarFila(nuevaFila);
+    });
+
+    tabla.appendChild(nuevaFila);
+    actualizarContadores();
+});
+
+document.getElementById("btnEliminar").addEventListener("click", function () {
+    if (filaActiva) {
+        filaActiva.remove();
+        filaActiva = null;
+        actualizarContadores();
+    }
+});
+
+document.getElementById("btnSubir").addEventListener("click", function () {
+    if (filaActiva && filaActiva.previousElementSibling) {
+        tabla.insertBefore(filaActiva, filaActiva.previousElementSibling);
+    }
+});
+
+document.getElementById("btnBajar").addEventListener("click", function () {
+    if (filaActiva && filaActiva.nextElementSibling) {
+        tabla.insertBefore(filaActiva.nextElementSibling, filaActiva);
+    }
+});
+</script>
+
+
+</body>
+</html>
