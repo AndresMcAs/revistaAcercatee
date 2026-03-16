@@ -6,15 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import jakarta.persistence.*;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
-import lombok.Data;
 
 
 
@@ -31,7 +26,7 @@ import lombok.Data;
 	    @Column(length = 2000)
 	    private String descripcion;
 
-	 /*   private LocalDate fechaRegistro;*/
+	    private LocalDate fechaRegistro;
 
 	    private String estatus;
 

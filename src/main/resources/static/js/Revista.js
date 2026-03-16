@@ -78,62 +78,113 @@ $(document).ready(function () {
 	// registro de usuario 
 	$("#forma-registro").submit(function (e) {
 
-		e.preventDefault();
+    e.preventDefault();
 
-	}).validate({
-		rules: {
-			correo: {
-				required: true,
-				maxlength: 100,
-				email: true
-			},
-			nombre: {
-				required: true
-			},
-			apellidoPat: {
-				required: true
-			},
-			apellidoMat: {
-				required: true
-			}
-		},
-		errorPlacement: function (error, element) {
-			error.appendTo(element.parent());
-		},
-		submitHandler: function (form) {
+}).validate({
 
-			var nombre = $("#nombre").val();
-	        var apellidopat = $("#apellidoPat").val();
-	        var apellidomat = $("#apellidoMat").val();
-	        var correo = $("#correo").val();
-            var especialidad = $("#especialidad").val();
-            var grado = $("#grado").val();
-            var telefono = $("#telefono").val();
-            var genero = $("#genero").val();
-            var rol = $("#rol").val();
-    
-			$.post("/usuario/registro", {
-				'nombre': nombre,
-				'apellidoPat': apellidopat,
-				'apellidoMat': apellidomat,
-				'correo': correo,
-				'especialidad': especialidad,
-				'grado': grado,
-				'telefono': telefono,
-				'genero': genero,
-				'rol': rol
-			}, function (fragmento) {
+    rules: {
+        correo: {
+            required: true,
+            email: true
+        },
+        nombre: {
+            required: true
+        },
+        apellidoPaterno: {
+            required: true
+        }
+    },
 
-				$('#modalMensaje').replaceWith(fragmento);
+    submitHandler: function () {
 
-				var myModal = bootstrap.Modal.getOrCreateInstance(document.querySelector('#modalExitosoError'));
-				myModal.show();
+        var datos = {
 
-			});
+            nombre: $("#nombre").val(),
+            apellidoPaterno: $("#apellidopat").val(),
+            apellidoMaterno: $("#apellidomat").val(),
+            correo: $("#correo").val(),
+            especialidad: $("#especialidad").val(),
+            gradoAcademico: $("#grado").val(),
+            institucion: $("#institucion").val(),
+            telefono: $("#telefono").val(),
+            genero: $("#genero").val(),
+            rol: $("#rol").val()
 
-			return false;
-		}
+        };
 
-	});
+        $.post("/usuario/registro", datos, function (fragmento) {
+
+            $('#modalMensaje').replaceWith(fragmento);
+
+            var modal = bootstrap.Modal.getOrCreateInstance(
+                document.querySelector('#modalExitosoError')
+            );
+
+            modal.show();
+
+            // LIMPIAR FORMULARIO
+            $("#forma-registro")[0].reset();
+
+        });
+
+    }
+
+});
+
+ // registro de Autor 
+	$("#forma-registroAutor").submit(function (e) {
+
+    e.preventDefault();
+
+}).validate({
+
+    rules: {
+        correo: {
+            required: true,
+            email: true
+        },
+        nombre: {
+            required: true
+        },
+        apellidoPaterno: {
+            required: true
+        }
+    },
+
+    submitHandler: function () {
+
+        var datos = {
+
+            nombre: $("#nombre").val(),
+            apellidoPaterno: $("#apellidopat").val(),
+            apellidoMaterno: $("#apellidomat").val(),
+            correo: $("#correo").val(),
+            especialidad: $("#especialidad").val(),
+            gradoAcademico: $("#grado").val(),
+            institucion: $("#institucion").val(),
+            telefono: $("#telefono").val(),
+            genero: $("#genero").val(),
+           
+
+        };
+
+        $.post("/usuario/registroAutor", datos, function (fragmento) {
+
+            $('#modalMensaje').replaceWith(fragmento);
+
+            var modal = bootstrap.Modal.getOrCreateInstance(
+                document.querySelector('#modalExitosoError')
+            );
+
+            modal.show();
+
+            // LIMPIAR FORMULARIO
+            $("#forma-registroAutor")[0].reset();
+
+        });
+
+    }
+
+});
 
 });

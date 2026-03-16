@@ -6,8 +6,11 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import mx.edu.uacm.revistaAcercate.dominio.Usuario;
+import mx.edu.uacm.revistaAcercate.dominio.Autor;
+
 import mx.edu.uacm.revistaAcercate.error.AplicacionExcepcion;
 import mx.edu.uacm.revistaAcercate.service.UsuarioService;
+import mx.edu.uacm.revistaAcercate.service.AutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +32,8 @@ public class UsuarioController {
 	
   @Autowired
   private UsuarioService usuarioService;
+  @Autowired
+  private AutorService autorService;
   @Autowired
   private HttpSession httpSession;
   private String registrar;
@@ -90,28 +95,43 @@ public class UsuarioController {
    */
   @PostMapping("/registro")
   public String registrarUsuario(Model model, Usuario usuario) {
-	  log.debug(">Entrando a usuarioController.registrarusuario");
-    if (log.isDebugEnabled()) {
-      log.debug(">Entrando a usuarioController.registrarusuario");
-      log.debug("Usuario {}", usuario);
-    }
-    
-    if (usuario.getNombre() != null && usuario.getCorreo() != null) {
 
-      try {
-        Usuario usuarioGuardado;
-        usuarioGuardado = usuarioService.registrarUsuario(usuario);
-        if (usuarioGuardado != null && usuarioGuardado.getId() != null)
-          model.addAttribute("mensajeExitoso", "Registro exitoso!" + usuario.getNombre());
-      } catch (AplicacionExcepcion e) {
-        log.error(e.getMessage());
-        model.addAttribute("mensajeError", e.getMessage());
+      String registrar;
+
+      log.debug("> Entrando a usuarioController.registrarUsuario");
+      log.debug("Usuario {}", usuario);
+
+      if (usuario.getNombre() != null && usuario.getCorreo() != null) {
+
+          try {
+
+              Usuario usuarioGuardado = usuarioService.registrarUsuario(usuario);
+
+              if (usuarioGuardado != null && usuarioGuardado.getId() != null) {
+
+                  model.addAttribute(
+                          "mensajeExitoso",
+                          "Registro exitoso! " + usuario.getNombre()
+                  );
+
+              }
+
+          } catch (AplicacionExcepcion e) {
+
+              log.error(e.getMessage());
+              model.addAttribute("mensajeError", e.getMessage());
+
+          }
+
+          registrar = "registro_usuarios :: #modalMensaje";
+
+      } else {
+
+          registrar = "redirect:/registro_usuarios";
+
       }
-      registrar = "registroUsuarios::#modalMensaje";
-    } else {
-      registrar = "redirect:/registroUsuarios";
-    }
-    return registrar;
+
+      return registrar;
   }
   
   /**
@@ -128,6 +148,57 @@ public class UsuarioController {
 	return "home-revision";
   // evaluacion 
 	  
+  }
+  
+  
+  
+  /* registro de autores */
+  
+  /**
+   * registro de autores 
+   * @param model
+   * @param autor
+   * @return
+   */
+  @PostMapping("/registroAutor")
+  public String registrarAutor(Model model, Autor autor) {
+
+  
+
+      log.debug("> Entrando a usuarioController.registrarAutor");
+      log.debug("autor {}", autor);
+
+      if (autor.getNombre() != null && autor.getCorreo() != null) {
+
+          try {
+
+              Autor usuarioGuardado = autorService.registrarAutor(autor);
+
+              if (usuarioGuardado != null && usuarioGuardado.getId() != null) {
+
+                  model.addAttribute(
+                          "mensajeExitoso",
+                          "Registro exitoso! " + autor.getNombre()
+                  );
+
+              }
+
+          } catch (AplicacionExcepcion e) {
+
+              log.error(e.getMessage());
+              model.addAttribute("mensajeError", e.getMessage());
+
+          }
+
+          registrar = "registro_autores :: #modalMensaje";
+
+      } else {
+
+          registrar = "redirect:/registro_autores";
+
+      }
+
+      return registrar;
   }
 
 }

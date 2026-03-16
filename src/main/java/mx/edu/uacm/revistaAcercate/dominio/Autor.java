@@ -13,12 +13,16 @@ public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nombre;
-
-    private String apellido;
-
+    private String apellidoPeterno;
+    private String apellidoMaterno;
     private String correo;
+    private String especialidad;
+    private String gradoAcademico;
+   
+    private String institucion;
+    private String telefono;
+    private String genero;
     
     public Autor() {
     	
