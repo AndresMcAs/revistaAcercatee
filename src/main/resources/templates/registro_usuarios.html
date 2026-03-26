@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	>
 
 <head>
 <meta charset="UTF-8">
@@ -146,55 +147,61 @@ body {
 
 		</form>
 	</div>
-
+	
 	<!-- ===== MODAL MENSAJE ===== -->
-	<div class="modal fade" id="modalExitosoError" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalExitosoError" tabindex="-1"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-		<div class="modal-dialog">
-			<div class="modal-content">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-				<div class="modal-header">
+            <div class="modal-header">
 
-					<h5 class="modal-title" id="exampleModalLabel">Mensaje</h5>
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Mensaje
+                </h5>
 
-					<button type="button" class="btn-close" data-bs-dismiss="modal">
-					</button>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
 
-				</div>
+            </div>
 
-				<div class="modal-body">
+            <div class="modal-body">
 
-					<div id="modalMensaje">
+                <div id="modalMensaje">
 
-						<th:block th:if="${mensajeExitoso != null}">
-							<p th:text="${mensajeExitoso}"></p>
-						</th:block>
+                    <th:block th:if="${mensajeExitoso != null}">
+                        <p th:text="${mensajeExitoso}"></p>
+                    </th:block>
 
-						<th:block th:if="${mensajeError != null}">
-							<p th:text="${mensajeError}"></p>
-						</th:block>
+                    <th:block th:if="${mensajeError != null}">
+                        <p th:text="${mensajeError}"></p>
+                    </th:block>
 
-					</div>
+                </div>
 
-				</div>
+            </div>
 
-				<div class="modal-footer">
+            <div class="modal-footer">
 
-					<button type="button" class="btn btn-success"
-						data-bs-dismiss="modal">Aceptar</button>
+                <button type="button"
+                        class="btn btn-success"
+                        data-bs-dismiss="modal">
+                    Aceptar
+                </button>
 
-				</div>
+            </div>
 
-			</div>
-		</div>
-	</div>
+        </div>
+    </div>
+</div>
 
 	<!-- ===== BOOTSTRAP JS ===== -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script th:src="@{/js/Revista.js}"></script>

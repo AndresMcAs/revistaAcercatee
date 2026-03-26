@@ -24,14 +24,14 @@
             <!-- BARRA SUPERIOR -->
             <div class="d-flex flex-wrap gap-2 mb-3">
               
-                <input type="text" class="form-control w-auto" placeholder="Buscar revista...">
+                <input type="text" class="form-control w-auto" placeholder="Buscar artículo..." name ="buscar" >
 
                 <button class="btn btn-outline-primary">
                     🔎 Buscar
                 </button>
 
                 <button class="btn btn-success"
-                        onclick="window.location.href='/registroArticulos'">
+                        onclick="window.location.href='/articulo/registro'">
                     ➕ Agregar Artículo
                 </button>
 
@@ -39,7 +39,7 @@
                     ❌ Eliminar
                 </button>
 
-                <button class="btn btn-warning">
+                <button class="btn btn-warning"  onclick="window.location.href='/asignacionRevision'">
                     📝 Asignar Revisión
                 </button>
 
@@ -65,10 +65,34 @@
                         </tr>
                     </thead>
 
-                    <tbody id="tablaArticulos">
-                    </tbody>
+						<tbody id="tablaArticulos">
 
-                </table>
+							<tr th:each="articulo : ${articulos}">
+
+								<!-- TÍTULO -->
+								<td th:text="${articulo.titulo}"></td>
+
+								<!-- AUTOR PRINCIPAL -->
+								<td
+									th:text="${#lists.isEmpty(articulo.autores) ? 'Sin autor' : articulo.autores.get(0).nombre}"></td>
+
+								<!-- ESTATUS -->
+								<td th:text="${articulo.estatus}"></td>
+
+								<!-- TEMA -->
+								<td th:text="${articulo.tema}"></td>
+
+								<!-- SECCIÓN -->
+								<td th:text="${articulo.seccion}"></td>
+
+								<!-- NÚMERO -->
+								<td th:text="${articulo.numeroCaracteres}"></td>
+
+							</tr>
+
+						</tbody>
+
+					</table>
 
             </div>
 

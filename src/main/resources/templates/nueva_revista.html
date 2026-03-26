@@ -18,49 +18,8 @@
 </head>
 
 <body class="bg-light"> 
-<!-- ===== NAVBAR (FRAGMENT) ===== -->
-<div >
-   <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-success">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#"> <h1> Acércate</h1></a>
-
-        <!-- BOTÓN RESPONSIVE -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- MENÚ -->
-        <div class="collapse navbar-collapse" id="navbarMenu">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link" href="index.html">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html#seccion-usuarios">Usuarios</a>
-                </li>
-                 <li class="nav-item">
-                    <a class="nav-link" href="index.html#seccion-articulos">Artículos</a>
-                </li>
- 
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html#seccion-revistas">Revistas</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html#seccion-revisores">Revisiones</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="publicaciones.html">Publicaciones</a>
-                </li>
-
-            </ul>
-        </div>
-    </div>
-</nav>
-
-</div>
-<!-- navbar----------->   
+<!-- NAVBAR -->
+<div th:insert="~{header :: navbar}"></div>
 <div class="container my-4">
 
     <!-- TÍTULO -->

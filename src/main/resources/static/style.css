@@ -1,0 +1,123 @@
+/* 🔴 COLOR PRINCIPAL ROJO */
+:root {
+    --color-principal: #c62828;      /* rojo fuerte */
+    --color-secundario: #e53935;     /* rojo claro */
+    --color-hover: #b71c1c;          /* rojo oscuro */
+    --color-fondo: #f9f9f9;
+}
+
+/* GENERAL */
+body {
+    background-color: var(--color-fondo);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* 🔴 NAVBAR */
+.bg-brown {
+    background-color: var(--color-principal) !important;
+}
+
+.navbar {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* LOGIN */
+.login-bar {
+    background: #ffffff;
+    border-bottom: 1px solid #ddd;
+}
+
+/* SIDEBAR */
+.sidebar {
+    background: #ffffff;
+    border-right: 1px solid #ddd;
+    height: 100vh;
+}
+
+/* LINKS SIDEBAR */
+.nav-link {
+    color: #444;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+/* HOVER */
+.nav-link:hover {
+    background: var(--color-principal);
+    color: #fff;
+    transform: translateX(5px);
+}
+
+/* ICONOS */
+.nav-link i {
+    font-size: 1.2rem;
+}
+
+/* SECCIONES */
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* TITULOS */
+h2, h3 {
+    color: var(--color-principal);
+}
+
+/* BOTONES */
+.btn-primary {
+    background-color: var(--color-principal);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-hover);
+}
+
+/* CARRUSEL */
+.carousel img {
+    height: 420px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* CONTROLES CARRUSEL */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1);
+}
+
+/* FOOTER */
+.footer {
+    background: var(--color-principal);
+    color: white;
+    font-weight: 500;
+}
+
+/* BUSCADOR */
+input.form-control {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+input.form-control:focus {
+    border-color: var(--color-principal);
+    box-shadow: 0 0 5px rgba(198, 40, 40, 0.5);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .sidebar {
+        height: auto;
+    }
+
+    .carousel img {
+        height: 250px;
+    }
+}

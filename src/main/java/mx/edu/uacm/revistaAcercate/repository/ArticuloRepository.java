@@ -1,15 +1,11 @@
 package mx.edu.uacm.revistaAcercate.repository;
 
-import org.springframework.data.repository.CrudRepository;
-
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import mx.edu.uacm.revistaAcercate.dominio.Articulo;
 
-public interface ArticuloRepository extends CrudRepository<Articulo, Long> {
-	
-	Articulo findByNombre(String nombre);
-	
-	public Long countById(Long id);
+public interface ArticuloRepository extends JpaRepository<Articulo, Long> {
 
-	
+    // Buscar por título (opcional)
+    Articulo findByTitulo(String titulo);
+
 }

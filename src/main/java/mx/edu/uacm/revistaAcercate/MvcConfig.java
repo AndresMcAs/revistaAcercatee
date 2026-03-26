@@ -21,11 +21,12 @@ public class MvcConfig implements WebMvcConfigurer {
      registry.addViewController("/registroArticulos").setViewName("registro_articulos");
      registry.addViewController("/registroUsuarios").setViewName("registro_usuarios");
      registry.addViewController("/registroAutores").setViewName("registro_autores");
-     registry.addViewController("/menuRevista").setViewName("menu_revistas");
-     registry.addViewController("/menuRevision").setViewName("menu_revsion");
+     registry.addViewController("/menuRevistas").setViewName("menu_revistas");
+     registry.addViewController("/menuRevision").setViewName("menu_revision");
      registry.addViewController("/menuArticulos").setViewName("menu_articulos");
      registry.addViewController("/nuevaRevista").setViewName("nueva_revista");
      registry.addViewController("/asignacionRevision").setViewName("asignacion_revision");
+     registry.addViewController("/revisionArticulo").setViewName("revision_articulo");
      registry.addViewController("/login").setViewName("login");
     
   }

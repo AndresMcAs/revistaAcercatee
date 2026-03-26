@@ -146,7 +146,7 @@ $(document).ready(function () {
         nombre: {
             required: true
         },
-        apellidoPaterno: {
+        apellidoPat: {
             required: true
         }
     },
@@ -156,8 +156,8 @@ $(document).ready(function () {
         var datos = {
 
             nombre: $("#nombre").val(),
-            apellidoPaterno: $("#apellidopat").val(),
-            apellidoMaterno: $("#apellidomat").val(),
+            apellidoPat: $("#apellidopat").val(),
+            apellidoMat: $("#apellidomat").val(),
             correo: $("#correo").val(),
             especialidad: $("#especialidad").val(),
             gradoAcademico: $("#grado").val(),
@@ -186,5 +186,6 @@ $(document).ready(function () {
     }
 
 });
+
 
 });

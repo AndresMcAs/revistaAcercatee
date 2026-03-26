@@ -14,8 +14,8 @@ public class Autor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private String apellidoPeterno;
-    private String apellidoMaterno;
+    private String apellidoPat;
+    private String apellidoMat;
     private String correo;
     private String especialidad;
     private String gradoAcademico;

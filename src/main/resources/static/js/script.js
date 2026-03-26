@@ -139,3 +139,18 @@
 
 
 })(jQuery);
+
+$(document).ready(function () {
+    $('.main-slider').slick({
+        autoplay: true,
+        autoplaySpeed: 4000,
+        speed: 1000,
+        dots: true,
+        arrows: true,
+        fade: true,
+        pauseOnHover: true,
+        pauseOnFocus: false,
+        cssEase: 'ease-in-out',
+        adaptiveHeight: false
+    });
+});

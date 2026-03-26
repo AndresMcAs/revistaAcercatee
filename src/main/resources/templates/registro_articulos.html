@@ -1,90 +1,51 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Registro de Artículos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="bg-light">
-<!-- ===== NAVBAR (FRAGMENT) ===== -->
-<div >
-   <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-success">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#"> <h1> Acércate</h1></a>
 
-        <!-- BOTÓN RESPONSIVE -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<!-- NAVBAR -->
+<div th:insert="~{header :: navbar}"></div>
 
-        <!-- MENÚ -->
-        <div class="collapse navbar-collapse" id="navbarMenu">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link" href="index.html">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html#seccion-usuarios">Usuarios</a>
-                </li>
-                 <li class="nav-item">
-                    <a class="nav-link" href="index.html#seccion-articulos">Artículos</a>
-                </li>
- 
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html#seccion-revistas">Revistas</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="revisiones.html">Revisiones</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html#seccion-revisores">Publicaciones</a>
-                </li>
-
-            </ul>
-        </div>
-    </div>
-</nav>
-
-</div>
-<!-- navbar----------->   
 <div class="container my-4">
-
     <div class="card shadow">
+
         <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Registro de Artículos</h4>
+            <h4>Registro de Artículos</h4>
         </div>
 
         <div class="card-body">
-            <form>
 
-                <!-- TÍTULO -->
+            <form id="form-registro-articulo"
+                  th:action="@{/articulo/registro}"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <!-- TITULO -->
                 <div class="mb-3">
-                    <label class="form-label">Título del Artículo</label>
-                    <input type="text" class="form-control" required>
+                    <label>Título del Artículo</label>
+                    <input type="text" class="form-control" name="titulo" required>
                 </div>
 
-                <!-- DESCRIPCIÓN -->
+                <!-- DESCRIPCION -->
                 <div class="mb-3">
-                    <label class="form-label">Descripción</label>
-                    <textarea class="form-control" rows="3"></textarea>
+                    <label>Descripción</label>
+                    <textarea class="form-control" name="descripcion"></textarea>
                 </div>
 
-                <div class="row g-3">
+                <div class="row">
 
                     <div class="col-md-4">
-                        <label class="form-label">Fecha de Registro</label>
-                        <input type="date" class="form-control">
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Estatus</label>
-                        <select class="form-select">
+                        <label>Estatus</label>
+                        <select class="form-select" name="estatus">
                             <option>En espera</option>
                             <option>Revisado</option>
                             <option>Rechazado</option>
@@ -92,8 +53,8 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Versión</label>
-                        <select class="form-select">
+                        <label>Versión</label>
+                        <select class="form-select" name="version">
                             <option>v1</option>
                             <option>v2</option>
                             <option>v3</option>
@@ -106,56 +67,61 @@
 
                 <!-- WORD -->
                 <div class="mt-3">
-                    <label class="form-label">Archivo Word</label>
-                    <input type="file" class="form-control" accept=".doc,.docx">
+                    <label>Archivo Word</label>
+                    <input type="file" class="form-control" name="archivo" accept=".doc,.docx">
                 </div>
 
                 <!-- AUTORES -->
                 <div class="mt-4 border rounded p-3">
 
-                    <label class="form-label fw-bold">Autor Principal</label>
+                    <label class="fw-bold">Autor Principal</label>
 
                     <div id="autoresContainer">
 
                         <div class="autor-item mb-2">
-                            <select class="form-select">
-                                <option>-- Seleccionar autor (BD) --</option>
+                            <select class="form-select" id="autorPrincipal" name="autorPrincipal">
+                                <option value="">-- Seleccionar autor --</option>
+
+                                <option th:each="autor : ${autores}"
+                                        th:value="${autor.id}"
+                                        th:text="${autor.nombre + ' ' + autor.apellidoPat}">
+                                </option>
                             </select>
                         </div>
 
                         <small id="labelSecundario" class="text-muted d-none">
-                            Autor(es) secundario(s)
+                            Autor(es) secundarios
                         </small>
 
                     </div>
 
-                    <!-- ICONOS ABAJO DERECHA -->
                     <div class="d-flex justify-content-end gap-2 mt-3">
-                        <button type="button"
-                                id="btnAgregarAutor"
+
+                        <button type="button" id="btnAgregarAutor"
                                 class="btn btn-outline-primary btn-sm">
                             ➕👤
                         </button>
 
                         <button type="button"
                                 class="btn btn-outline-secondary btn-sm"
-                                onclick="window.location.href='registro_autores.html'">
+                                onclick="window.location.href='/registroAutores'">
                             ➜
                         </button>
-                    </div>
 
+                    </div>
                 </div>
 
-                <div class="row g-3 mt-3">
+                <!-- DATOS -->
+                <div class="row mt-3">
 
                     <div class="col-md-4">
-                        <label class="form-label">Número de Caracteres</label>
-                        <input type="number" class="form-control">
+                        <label>Número de Caracteres</label>
+                        <input type="number" class="form-control" name="numero">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Tema</label>
-                        <select class="form-select">
+                        <label>Tema</label>
+                        <select class="form-select" name="tema">
                             <option>Química</option>
                             <option>Matemáticas</option>
                             <option>TICs</option>
@@ -163,27 +129,22 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Sección</label>
-                        <select class="form-select">
+                        <label>Sección</label>
+                        <select class="form-select" name="seccion">
                             <option>Curiosidades</option>
                             <option>Divulgación</option>
                             <option>Difusión</option>
                             <option>Tiempo fuera</option>
-                            <option>Únete</option>
-                            <option>Artefacto</option>
-                            <option>Semblanzas</option>
-                            <option>T-Reto</option>
                         </select>
                     </div>
 
                 </div>
 
                 <!-- IMÁGENES -->
-                <div class="mt-4 border rounded p-3">
+                <div class="mt-4 border p-3 rounded">
 
-                    <label class="form-label fw-bold">
-                        Imágenes
-                        <span id="contadorImagenes" class="text-muted">(0/5)</span>
+                    <label class="fw-bold">
+                        Imágenes <span id="contadorImagenes">(0/5)</span>
                     </label>
 
                     <input type="file"
@@ -192,16 +153,14 @@
                            accept="image/*"
                            multiple>
 
-                    <div id="previewImagenes"
-                         class="d-flex flex-wrap gap-3 mt-3">
-                    </div>
+                    <div id="previewImagenes" class="d-flex flex-wrap gap-3 mt-3"></div>
 
                 </div>
 
                 <!-- BOTONES -->
-                <div class="d-flex justify-content-end gap-3 mt-4">
-                    <button type="submit" class="btn btn-success">Registrar</button>
-                    <button type="reset" class="btn btn-danger" onclick="history.back()">Cancelar</button>
+                <div class="mt-4 d-flex gap-3">
+                    <button class="btn btn-success w-50" type="submit">Registrar</button>
+                    <button class="btn btn-danger w-50" type="button" onclick="history.back()">Cancelar</button>
                 </div>
 
             </form>
@@ -209,122 +168,155 @@
     </div>
 </div>
 
-<!-- Bootstrap -->
+<!-- MODAL -->
+<div class="modal fade" id="modalExitosoError">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Mensaje</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div id="modalMensaje"></div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-/* ========================= AUTORES ========================= */
-const btnAgregarAutor = document.getElementById("btnAgregarAutor");
-const autoresContainer = document.getElementById("autoresContainer");
-const labelSecundario = document.getElementById("labelSecundario");
 
+/* ================= AUTORES ================= */
 let totalAutores = 1;
 
-btnAgregarAutor.addEventListener("click", function () {
+$("#btnAgregarAutor").click(function () {
 
     if (totalAutores >= 5) {
-        alert("Máximo 5 autores permitidos.");
+        alert("Máximo 5 autores");
         return;
     }
 
-    labelSecundario.classList.remove("d-none");
+    $("#labelSecundario").removeClass("d-none");
 
-    const div = document.createElement("div");
-    div.classList.add("autor-item", "mb-2", "position-relative");
+    let opciones = $("#autorPrincipal").html();
 
-    div.innerHTML = `
-        <select class="form-select pe-5">
-            <option>-- Seleccionar autor secundario (BD) --</option>
-        </select>
+    $("#autoresContainer").append(`
+        <div class="autor-item mb-2 position-relative">
+            <select class="form-select pe-5" name="autoresSecundarios">
+                ${opciones}
+            </select>
 
-        <button type="button"
-                class="btn btn-danger btn-sm btnEliminarAutor"
-                style="position:absolute; bottom:4px; right:4px;">
-            ❌
-        </button>
-    `;
+            <button type="button"
+                    class="btn btn-danger btn-sm eliminarAutor"
+                    style="position:absolute; right:5px; bottom:5px;">
+                ❌
+            </button>
+        </div>
+    `);
 
-    autoresContainer.appendChild(div);
     totalAutores++;
 });
 
-autoresContainer.addEventListener("click", function (e) {
-    if (e.target.classList.contains("btnEliminarAutor")) {
-        e.target.parentElement.remove();
-        totalAutores--;
+$(document).on("click", ".eliminarAutor", function () {
+    $(this).parent().remove();
+    totalAutores--;
 
-        if (totalAutores === 1) {
-            labelSecundario.classList.add("d-none");
-        }
+    if (totalAutores === 1) {
+        $("#labelSecundario").addClass("d-none");
     }
 });
 
 
-/* ========================= IMÁGENES ========================= */
-const imagenesInput = document.getElementById("imagenesInput");
-const preview = document.getElementById("previewImagenes");
-const contadorImagenes = document.getElementById("contadorImagenes");
-
+/* ================= IMÁGENES ================= */
 let imagenesSeleccionadas = [];
 
-imagenesInput.addEventListener("change", function (event) {
+$("#imagenesInput").change(function (e) {
 
-    const archivos = Array.from(event.target.files);
+    Array.from(e.target.files).forEach(file => {
 
-    archivos.forEach(file => {
-
-        if (imagenesSeleccionadas.length >= 5) {
-            alert("Solo puedes subir máximo 5 imágenes.");
-            return;
+        if (imagenesSeleccionadas.length < 5) {
+            imagenesSeleccionadas.push(file);
         }
-
-        imagenesSeleccionadas.push(file);
     });
 
-    renderizarImagenes();
-    imagenesInput.value = "";
+    renderImagenes();
 });
 
-function renderizarImagenes() {
+function renderImagenes() {
 
-    preview.innerHTML = "";
+    $("#previewImagenes").html("");
 
     imagenesSeleccionadas.forEach((file, index) => {
 
-        const reader = new FileReader();
+        let reader = new FileReader();
 
         reader.onload = function (e) {
 
-            const div = document.createElement("div");
-            div.style.position = "relative";
-            div.style.width = "110px";
-
-            div.innerHTML = `
-                <img src="${e.target.result}"
-                     style="width:100px;height:100px;object-fit:cover;"
-                     class="border rounded shadow-sm">
-
-                <button type="button"
-                        class="btn btn-danger btn-sm"
-                        style="position:absolute; bottom:-8px; right:-8px; padding:2px 6px; font-size:12px;"
-                        onclick="eliminarImagen(${index})">
+            $("#previewImagenes").append(`
+                <div style="position:relative">
+                    <img src="${e.target.result}"
+                         style="width:100px;height:100px;object-fit:cover;">
+                    <button onclick="eliminarImagen(${index})"
+                        style="position:absolute; bottom:0; right:0;">
                         ❌
-                </button>
-            `;
-
-            preview.appendChild(div);
+                    </button>
+                </div>
+            `);
         };
 
         reader.readAsDataURL(file);
     });
 
-    contadorImagenes.textContent = `(${imagenesSeleccionadas.length}/5)`;
+    $("#contadorImagenes").text(`(${imagenesSeleccionadas.length}/5)`);
 }
 
 function eliminarImagen(index) {
     imagenesSeleccionadas.splice(index, 1);
-    renderizarImagenes();
+    renderImagenes();
 }
+
+
+/* ================= ENVÍO AJAX ================= */
+$("#form-registro-articulo").submit(function (e) {
+
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    imagenesSeleccionadas.forEach(img => {
+        formData.append("imagenes", img);
+    });
+
+    $.ajax({
+        url: "/articulo/registro",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function (resp) {
+
+            $("#modalMensaje").html(resp);
+
+            let modal = new bootstrap.Modal(
+                document.getElementById('modalExitosoError')
+            );
+
+            modal.show();
+        }
+    });
+});
+
 </script>
 
 </body>
