@@ -1,13 +1,11 @@
 package mx.edu.uacm.revistaAcercate.controller;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import mx.edu.uacm.revistaAcercate.dominio.Articulo;
 import mx.edu.uacm.revistaAcercate.dominio.Autor;
-import mx.edu.uacm.revistaAcercate.error.AplicacionExcepcion;
 import mx.edu.uacm.revistaAcercate.service.ArticuloService;
 import mx.edu.uacm.revistaAcercate.service.AutorService;
 import org.springframework.stereotype.Controller;
@@ -17,76 +15,62 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/articulo")
-@Slf4j
 @RequiredArgsConstructor 
 public class ArticuloController {
 
     private final ArticuloService articuloService;
     private final AutorService autorService;
-    /**
-     * REGISTRO DE ARTÍCULOS
-     */
+   
     @PostMapping("/registro")
     public String registrarArticulo(
             Model model,
             Articulo articulo,
             @RequestParam("archivo") MultipartFile archivo,
-            @RequestParam(value = "imagenes", required = false) List<MultipartFile> imagenes,
-            @RequestParam(value = "autorPrincipal", required = false) Long autorPrincipal,
-            @RequestParam(value = "autoresSecundarios", required = false) List<Long> autoresSecundarios
+            @RequestParam(value = "imagenesFiles", required = false) List<MultipartFile> imagenes,
+            @RequestParam("autorPrincipal") Long autorPrincipal,
+            @RequestParam(value = "autoresSecundarios", required = false) String[] autoresSecundarios
     ) {
-
-        String vista;
-
-        log.debug("> Entrando a ArticuloController.registrarArticulo");
-        log.debug("Articulo {}", articulo);
 
         try {
 
-            //  FECHA AUTOMÁTICA
-            articulo.setFechaRegistro(LocalDate.now());
+            List<Long> ids = new ArrayList<>();
 
-            // VALIDACIÓN BÁSICA
-            if (articulo.getTitulo() == null || articulo.getTitulo().isEmpty()) {
-                throw new AplicacionExcepcion("El título es obligatorio");
+            if (autoresSecundarios != null) {
+                for (String id : autoresSecundarios) {
+                    if (id != null && !id.isEmpty()) {
+                        ids.add(Long.parseLong(id));
+                    }
+                }
             }
 
-           
-            Articulo guardado = articuloService.registrarArticulo(
+            articuloService.registrarArticulo(
                     articulo,
                     archivo,
                     imagenes,
                     autorPrincipal,
-                    autoresSecundarios
+                    ids
             );
 
-            if (guardado != null && guardado.getId() != null) {
-                model.addAttribute("mensajeExitoso", "Registro exitoso: " + articulo.getTitulo());
-            }
+            model.addAttribute("mensajeExitoso", "Artículo registrado correctamente");
 
-            vista = "registro_articulos :: #modalMensaje";
-
-        } catch (AplicacionExcepcion e) {
-
-            log.error(e.getMessage());
+        } catch (Exception e) {
             model.addAttribute("mensajeError", e.getMessage());
-            vista = "registro_articulos :: #modalMensaje";
         }
 
-        return vista;
+        return "registro_articulos :: #modalMensaje";
     }
+    @GetMapping("/registro")
+    public String mostrarFormulario(Model model) {
 
-    /**
-     * LISTAR ARTÍCULOS
-     */
-    @GetMapping("/buscar")
-    public String buscar(Model model) {
+        List<Autor> autores = autorService.obtenerAutores();
+        model.addAttribute("autores", autores);
 
-        log.debug("Entrando a buscar artículos");
-
-        List<Articulo> articulos = articuloService.obtenerArticulos();
-        model.addAttribute("articulos", articulos);
-
+        return "registro_articulos";
+    }
+    @GetMapping
+    public String listarArticulos(Model model) {
+        List<Articulo> lista = articuloService.obtenerArticulos();
+        model.addAttribute("articulos", lista);
         return "menu_articulos";
     }
 
@@ -95,7 +79,7 @@ public class ArticuloController {
      */
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id, Model model) {
-
+    	 System.out.println("id: " + id);
         try {
 
             articuloService.eliminarArticulo(id);
@@ -109,30 +93,60 @@ public class ArticuloController {
         return "menu_articulos :: #modalMensaje";
     }
 
-    /**
-     * EDITAR (CARGAR DATOS)
-     */
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
 
         Articulo articulo = articuloService.obtenerPorId(id);
-        model.addAttribute("articulo", articulo);
+        List<Autor> autores = autorService.obtenerAutores();
 
-        return "registro_articulos";
+        model.addAttribute("articulo", articulo);
+        model.addAttribute("autores", autores);
+
+        return "editar_articulo";
     }
     
-    /* Cargar datos de los autores*/
-    @GetMapping("/registro")
-    public String mostrarFormulario(Model model) {
+    @PostMapping("/editar/{id}")
+    public String actualizarArticulo(
+            @PathVariable Long id,
+            Articulo articulo,
+            @RequestParam(value = "archivo", required = false) MultipartFile archivo,
+            @RequestParam(value = "imagenesFiles", required = false) List<MultipartFile> imagenes,
+            @RequestParam("autorPrincipal") Long autorPrincipal,
+            @RequestParam(value = "autoresSecundarios", required = false) String[] autoresSecundarios,
+            @RequestParam(value = "imagenesEliminar", required = false) List<String> imagenesEliminar,
+            Model model
+    ) {
 
-        List<Autor> autores = autorService.obtenerAutores(); 
+        try {
 
-        model.addAttribute("autores", autores);
-        System.out.println("Autores: " + autores.size());
+            // 🔥 CONVERSIÓN SEGURA
+            List<Long> ids = new ArrayList<>();
 
-        return "registro_articulos";
+            if (autoresSecundarios != null) {
+                for (String a : autoresSecundarios) {
+                    if (a != null && !a.isEmpty()) {
+                        ids.add(Long.parseLong(a));
+                    }
+                }
+            }
+
+            articuloService.actualizarArticulo(
+                    id,
+                    articulo,
+                    archivo,
+                    imagenes,
+                    autorPrincipal,
+                    ids,
+                    imagenesEliminar
+            );
+
+            return "redirect:/articulo";
+
+        } catch (Exception e) {
+
+            model.addAttribute("mensajeError", e.getMessage());
+            return "editar_articulo";
+        }
     }
-
-	
 
 }

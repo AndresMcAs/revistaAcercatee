@@ -68,7 +68,7 @@
                 <!-- WORD -->
                 <div class="mt-3">
                     <label>Archivo Word</label>
-                    <input type="file" class="form-control" name="archivo" accept=".doc,.docx">
+                    <input type="file" class="form-control" name="archivo" accept=".doc,.docx" required>
                 </div>
 
                 <!-- AUTORES -->
@@ -76,39 +76,28 @@
 
                     <label class="fw-bold">Autor Principal</label>
 
-                    <div id="autoresContainer">
+                    <select class="form-select mb-3" id="autorPrincipal" name="autorPrincipal" required>
+                        <option value="" disabled selected>-- Seleccionar autor --</option>
 
-                        <div class="autor-item mb-2">
-                            <select class="form-select" id="autorPrincipal" name="autorPrincipal">
-                                <option value="">-- Seleccionar autor --</option>
+                        <option th:each="autor : ${autores}"
+                                th:value="${autor.id}"
+                                th:text="${autor.nombre + ' ' + autor.apellidoPat}">
+                        </option>
+                    </select>
 
-                                <option th:each="autor : ${autores}"
-                                        th:value="${autor.id}"
-                                        th:text="${autor.nombre + ' ' + autor.apellidoPat}">
-                                </option>
-                            </select>
-                        </div>
+                    <small id="labelSecundario" class="text-muted d-none">
+                        Autor(es) secundarios
+                    </small>
 
-                        <small id="labelSecundario" class="text-muted d-none">
-                            Autor(es) secundarios
-                        </small>
-
-                    </div>
+                    <div id="autoresContainer"></div>
 
                     <div class="d-flex justify-content-end gap-2 mt-3">
-
                         <button type="button" id="btnAgregarAutor"
                                 class="btn btn-outline-primary btn-sm">
                             ➕👤
                         </button>
-
-                        <button type="button"
-                                class="btn btn-outline-secondary btn-sm"
-                                onclick="window.location.href='/registroAutores'">
-                            ➜
-                        </button>
-
                     </div>
+
                 </div>
 
                 <!-- DATOS -->
@@ -149,6 +138,7 @@
 
                     <input type="file"
                            id="imagenesInput"
+                           name="imagenesFiles"
                            class="form-control"
                            accept="image/*"
                            multiple>
@@ -179,7 +169,17 @@
             </div>
 
             <div class="modal-body">
-                <div id="modalMensaje"></div>
+               <div id="modalMensaje">
+
+    <div th:if="${mensajeExitoso}" class="alert alert-success">
+        <span th:text="${mensajeExitoso}"></span>
+    </div>
+
+    <div th:if="${mensajeError}" class="alert alert-danger">
+        <span th:text="${mensajeError}"></span>
+    </div>
+
+</div>
             </div>
 
             <div class="modal-footer">
@@ -197,22 +197,24 @@
 <script>
 
 /* ================= AUTORES ================= */
-let totalAutores = 1;
-
 $("#btnAgregarAutor").click(function () {
-
-    if (totalAutores >= 5) {
-        alert("Máximo 5 autores");
-        return;
-    }
 
     $("#labelSecundario").removeClass("d-none");
 
-    let opciones = $("#autorPrincipal").html();
+    let principal = $("#autorPrincipal").val();
+
+    let opciones = $("#autorPrincipal option")
+        .filter(function () {
+            return this.value !== "" && this.value !== principal;
+        })
+        .map(function () {
+            return `<option value="${this.value}">${this.text}</option>`;
+        }).get().join("");
 
     $("#autoresContainer").append(`
         <div class="autor-item mb-2 position-relative">
             <select class="form-select pe-5" name="autoresSecundarios">
+                <option value="" selected>Seleccionar</option>
                 ${opciones}
             </select>
 
@@ -223,17 +225,10 @@ $("#btnAgregarAutor").click(function () {
             </button>
         </div>
     `);
-
-    totalAutores++;
 });
 
 $(document).on("click", ".eliminarAutor", function () {
     $(this).parent().remove();
-    totalAutores--;
-
-    if (totalAutores === 1) {
-        $("#labelSecundario").addClass("d-none");
-    }
 });
 
 
@@ -243,7 +238,6 @@ let imagenesSeleccionadas = [];
 $("#imagenesInput").change(function (e) {
 
     Array.from(e.target.files).forEach(file => {
-
         if (imagenesSeleccionadas.length < 5) {
             imagenesSeleccionadas.push(file);
         }
@@ -294,7 +288,7 @@ $("#form-registro-articulo").submit(function (e) {
     let formData = new FormData(this);
 
     imagenesSeleccionadas.forEach(img => {
-        formData.append("imagenes", img);
+        formData.append("imagenesFiles", img);
     });
 
     $.ajax({
@@ -313,6 +307,13 @@ $("#form-registro-articulo").submit(function (e) {
             );
 
             modal.show();
+
+            $('#modalExitosoError').on('hidden.bs.modal', function () {
+                document.getElementById("form-registro-articulo").reset();
+                $("#autoresContainer").html("");
+                $("#previewImagenes").html("");
+                $("#contadorImagenes").text("(0/5)");
+            });
         }
     });
 });

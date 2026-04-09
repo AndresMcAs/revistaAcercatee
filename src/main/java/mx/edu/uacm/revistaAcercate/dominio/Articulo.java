@@ -13,9 +13,7 @@ public class Articulo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String titulo;
-
     @Column(length = 2000)
     private String descripcion;
     private LocalDate fechaRegistro;
@@ -27,7 +25,6 @@ public class Articulo {
     private String archivoWord;
     @ElementCollection
     private List<String> imagenes;
-
     @ManyToOne
     @JoinColumn(name = "autor_principal_id")
     private Autor autorPrincipal;
@@ -36,7 +33,7 @@ public class Articulo {
     @JoinTable(
         name = "articulo_autores",
         joinColumns = @JoinColumn(name = "articulo_id"),
-        inverseJoinColumns = @JoinColumn(name = "autor_id")
+        inverseJoinColumns = @JoinColumn(name = "autores_id")
     )
     private List<Autor> autoresSecundarios;
 

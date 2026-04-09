@@ -19,6 +19,15 @@ public interface ArticuloService {
             Long autorPrincipalId,
             List<Long> autoresSecundariosIds
     ) throws AplicacionExcepcion;
+    
+    public Articulo actualizarArticulo(
+            Long id,
+            Articulo datos,
+            MultipartFile archivo,
+            List<MultipartFile> imagenes,
+            Long autorPrincipalId,
+            List<Long> autoresSecundariosIds,
+            List<String> imagenesEliminar);
 
     /**
      * Obtener todos los artículos
